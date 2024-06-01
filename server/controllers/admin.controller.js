@@ -38,4 +38,13 @@ export const updateAdmin=async(req,res,next)=>{
 }
 
 
+export const updateUser=async()=>{
+    try {
+        
+    } catch (error) {
+        
+    }
+
+}
+
 

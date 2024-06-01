@@ -8,10 +8,11 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 const Header = () => {
    
     const {currentUser}=useSelector((state)=>state.user)
+    console.log("currebt user details",currentUser);
   return (
     <div className='bg-blue-950'>
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
-        <Link to='/'>
+        <Link to='/user/home'>
           <h1 className='font-bold text-red-600'>Welcome To User App</h1>
         </Link>
         <ul className='flex gap-4'>

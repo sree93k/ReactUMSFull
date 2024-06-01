@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Link,useNavigate } from 'react-router-dom';
 import backgroundVideo from '../../../public/mainBg.mp4';
-import  {signInStart,signInSuccess,signInFailure} from '../../redux/user/userSlice'
+import  {signInStart,signInSuccess,signInFailure} from '../../redux/admin/adminSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
 const AdminSignin = () => {
 
   const [formData,setFormData]=useState({})
    const {loading,error}=useSelector((state)=>state.user)
+
    const navigate=useNavigate()
     const dispatch=useDispatch()
 

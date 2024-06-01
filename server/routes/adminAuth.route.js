@@ -1,5 +1,5 @@
 import express from 'express'
-import {signin,signout} from '../controllers/adminAduth.controller.js'
+import {signin,signout} from '../controllers/adminAuth.controller.js'
 const router=express()
 
 router.post('/signin',signin)
