@@ -56,10 +56,8 @@ const AdminSignin = () => {
 
   return (
     <div className='relative h-screen'>
-      <video autoPlay loop muted className='absolute inset-0 w-full h-full object-cover'>
-        <source src={backgroundVideo} type='video/mp4' />
-      </video>
-      <div className='relative z-10 p-3 max-w-lg mx-auto bg-white bg-opacity-75 rounded-lg'>
+
+      <div className='relative mt-3 z-10 p-3 max-w-lg mx-auto bg-white bg-opacity-75 rounded-lg'>
         <h1 className='text-3xl text-center font-semibold my-7'>Admin Sign In</h1>
         <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
           <input 

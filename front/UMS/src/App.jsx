@@ -12,9 +12,15 @@ import AdminDashboard from './pages/admin/adminDashboard';
 import HeaderRenderer from './components/HeaderRender';
 import EditProfile from './pages/user/edit'
 import ResetPassowrd from './pages/user/passwordEdit'
+import backgroundVideo from '../public/mainBg.mp4'
+
 const App = () => {
   return (
-    <div>
+    <div className='relative w-full h-screen'>
+       <video autoPlay loop muted className='absolute inset-0 w-full h-full object-cover'>
+        <source src={backgroundVideo} type='video/mp4' />
+      </video>
+      <div className='relative z-10'>
       <BrowserRouter>
         <HeaderRenderer />
         <Routes>
@@ -31,6 +37,7 @@ const App = () => {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Routes>
       </BrowserRouter>
+      </div>
     </div>
   );
 };

@@ -8,7 +8,9 @@ const home = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-  
+    const {currentUser} = useSelector((state) => state.user);
+    console.log("home page cureent user",currentUser);
+
     const handleEditProfile = () => {
       navigate('/user/editprofile');
     };
@@ -19,16 +21,13 @@ const home = () => {
     };
   return (
     <div className='relative h-screen'>
-    <video autoPlay loop muted className='absolute inset-0 w-full h-full object-cover'>
-      <source src={backgroundVideo} type='video/mp4' />
-    </video>
-    <div className='relative z-10 p-5 max-w-lg mx-auto bg-white bg-opacity-75 rounded-lg text-center'>
-      <h1 className='text-3xl font-semibold my-7'>Welcome to my website</h1>
-      <img src="" alt="Profile" className='mx-auto mb-4 w-32 h-32 rounded-full object-cover' />
+    <div className='relative mt-3 z-10 p-5 max-w-lg mx-auto bg-white bg-opacity-75 rounded-lg text-center'>
+      <h1 className='text-3xl font-semibold my-7'>Profile Details</h1>
+      <img src={currentUser.profilePicture} alt="Profile" className='mx-auto mb-4 w-32 h-32 rounded-full object-cover' />
       <div className='text-left'>
-        <h3 className='text-lg font-medium'>Name:</h3>
-        <h3 className='text-lg font-medium'>Email:</h3>
-        <h3 className='text-lg font-medium'>Mobile:</h3>
+        <h3 className='text-lg font-medium'>Name:{currentUser?currentUser.username:""}</h3>
+        <h3 className='text-lg font-medium'>Email:{currentUser?currentUser.email:""}</h3>
+       
       </div>
       <button 
         onClick={handleEditProfile} 

@@ -4,6 +4,8 @@ import backgroundVideo from '../../../public/mainBg.mp4';
 import  {signInStart,signInSuccess,signInFailure} from '../../redux/user/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import OAuth from '../../components/OAuth'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Signin = () => {
 
@@ -11,7 +13,7 @@ const Signin = () => {
    const {loading,error}=useSelector((state)=>state.user)
    const navigate=useNavigate()
     const dispatch=useDispatch()
-
+    const notify = (error) => toast(error);
     useEffect(() => {
       if (error) {
           dispatch(signInFailure(null));
@@ -42,24 +44,27 @@ const Signin = () => {
           const data=await res.json()
           if(data.success===false)
           {
+            console.log("failure sign in");
+            console.log("new error",error)
+            error?notify("Invalid Input"):notify("Account Not Found")
+            notify()
               dispatch(signInFailure(data))
               return;
           }
+          console.log("success sign in");
           dispatch(signInSuccess(data))
           console.log("routing to /home from signin");
           navigate('/user/home')
       } catch (error) {
-        console.log("handle submitted error 1");
-        console.log("signin error >>@@@####",error);
+        console.log("signin submitted error 1");
+          toast(error)
           dispatch(signInFailure(error))
       }
      }
   return (
     <div className='relative h-screen'>
-      <video autoPlay loop muted className='absolute inset-0 w-full h-full object-cover'>
-        <source src={backgroundVideo} type='video/mp4' />
-      </video>
-      <div className='relative z-10 p-3 max-w-lg mx-auto bg-white bg-opacity-75 rounded-lg'>
+
+      <div className='relative mt-3 z-10 p-3 max-w-lg mx-auto bg-white bg-opacity-75 rounded-lg'>
         <h1 className='text-3xl text-center font-semibold my-7'>Sign In</h1>
         <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
           <input 
@@ -76,10 +81,10 @@ const Signin = () => {
             className='bg-slate-100 p-3 rounded-lg'
             onChange={handleChange}
           />
-          <button 
+          <button disabled={loading}
             className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80' 
           >
-            Sign In
+            {loading?'Loading...':'Sign In'}
           </button>
           <OAuth/>
         </form>
@@ -90,6 +95,7 @@ const Signin = () => {
           </Link>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

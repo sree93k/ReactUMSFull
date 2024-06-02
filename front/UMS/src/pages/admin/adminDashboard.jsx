@@ -14,8 +14,9 @@ const adminDashboard = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg p-8 max-w-4xl w-full mx-4 overflow-auto">
+    <div className='relative h-screen '>
+
+      <div className=" relative z-10 mt-4  mx-auto  items-center justify-center  bg-white shadow-lg rounded-lg p-8 max-w-4xl w-full  overflow-auto">
         <h1 className="text-3xl font-bold mb-4 text-center">Dashboard</h1>
         <Table striped bordered hover className="min-w-full">
           <thead>
@@ -57,6 +58,7 @@ const adminDashboard = () => {
         </Table>
       </div>
     </div>
+
   );
 };
 

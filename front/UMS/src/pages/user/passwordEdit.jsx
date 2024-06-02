@@ -15,12 +15,10 @@ const passwordEdit = () => {
 
   return (
     <div className='relative h-screen'>
-      <video autoPlay loop muted className='absolute inset-0 w-full h-full object-cover'>
-        <source src={backgroundVideo} type='video/mp4' />
-      </video>
-      <div className='relative z-10 p-5 max-w-lg mx-auto bg-white bg-opacity-75 rounded-lg text-center'>
+  
+      <div className='relative z-10 mt-3 p-5 max-w-lg mx-auto bg-white bg-opacity-75 rounded-lg text-center'>
         <h1 className='text-3xl font-semibold my-7'>Password Reset</h1>
-        <form onSubmit={handleResetPassword} className='flex flex-col gap-4'>
+        <form onSubmit={handleResetPassword} className='flex flex-col gap-1'>
           <label htmlFor='email' className='text-lg font-medium text-left'>Email ID</label>
           <input 
             type="email" 

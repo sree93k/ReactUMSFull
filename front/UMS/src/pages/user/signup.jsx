@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import OAuth from '../../components/OAuth'
-import backgroundVideo from '../../../public/mainBg.mp4'
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const signup = () => {
   const [formData,setFormData]=useState({})
@@ -46,10 +47,8 @@ console.log("step0");
 
   return (
    <div className='relative w-full h-screen'>
-      <video autoPlay loop muted className='absolute inset-0 w-full h-full object-cover'>
-        <source src={backgroundVideo} type='video/mp4' />
-      </video>
-      <div className='relative z-10 p-3 max-w-lg mx-auto bg-white bg-opacity-75 rounded-lg '>
+
+      <div className='relative mt-3 z-10 p-3 max-w-lg mx-auto bg-white bg-opacity-75 rounded-lg '>
         <h1 className='text-3xl text-center font-semibold my-7'>Sign Up</h1>
         <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
           <input 

@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {Link} from 'react-router-dom'
 import {useSelector} from 'react-redux'
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
@@ -7,14 +7,16 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 
 const Header = () => {
-    const {currentAdmin}=useSelector((state)=>state.user)
+
+    const {currentAdmin}=useSelector((state)=>state.admin)
     console.log("current Admin details",currentAdmin);
     console.log("currentAdmin is >>@@##$$",currentAdmin);
+   
   return (
     <div className='bg-blue-950'>
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
         <Link to='/admin/home'>
-          <h1 className='font-bold text-blue-600'>Welcome Admin </h1>
+          <h1 className='font-bold text-blue-600'>Welcome  {currentAdmin?currentAdmin.adminname:""}</h1>
         </Link>
         <Link to='/admin/home'> 
             <h5>Home</h5>
