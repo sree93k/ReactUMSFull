@@ -13,7 +13,7 @@ const Header = () => {
     console.log("currentAdmin is >>@@##$$",currentAdmin);
    
   return (
-    <div className='bg-blue-950'>
+    <div className='bg-slate-900'>
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
         <Link to='/admin/home'>
           <h1 className='font-bold text-blue-600'>Welcome  {currentAdmin?currentAdmin.adminname:""}</h1>

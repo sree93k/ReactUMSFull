@@ -24,7 +24,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use('/server/adminAuth',adminAuthRoute)
-app.use('/server/adminAuth',()=>{console.log("iam admin index page");})
+// app.use('/server/adminAuth',()=>{console.log("iam admin index page");})
 app.use('/server/admin',adminRoute)
 app.use("/server/user",userRoute)
 app.use("/server/auth",authRoute)

@@ -4,7 +4,7 @@ import backgroundVideo from '../../../public/mainBg.mp4';
 import  {signInStart,signInSuccess,signInFailure} from '../../redux/user/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import OAuth from '../../components/OAuth'
-import { ToastContainer, toast } from 'react-toastify';
+import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Signin = () => {
@@ -95,7 +95,10 @@ const Signin = () => {
           </Link>
         </div>
       </div>
-      <ToastContainer />
+      <ToastContainer 
+      position='top-center'
+      theme='dark'
+      transition={Bounce}/>
     </div>
   );
 };

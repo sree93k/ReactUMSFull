@@ -39,11 +39,13 @@ const AdminSignin = () => {
               body:JSON.stringify(formData)
           })
           const data=await res.json()
+          console.log("the data in sign admin",data);
           if(data.success===false)
           {
               dispatch(signInFailure(data))
               return;
           }
+         
           dispatch(signInSuccess(data))
           console.log("routing to /home from signin");
           navigate('/admin/home')

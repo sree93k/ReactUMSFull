@@ -1,17 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import { useNavigate } from 'react-router-dom'; 
 
 const adminDashboard = () => {
+  const [users,setUsers]=useState([])
   const navigate = useNavigate();
 
-  const handleEdit = () => {
-    navigate('/admin/edit'); 
+  useEffect(()=>{
+     const ftechUsers=async()=>{
+      try {
+        
+        const res=await fetch('/server/admin/allUsers',{
+          method:'GET',
+          headers:{
+              'Content-Type':'application/json'
+          },
+        })
+       const allUsers=await res.json()
+       console.log("step3 All data Latest step1 ",allUsers);
+       setUsers(allUsers)
+      } catch (error) {
+        console.log(error);
+      }
+     }
+     ftechUsers()
+      
+  },[])
+
+  const handleEdit = (userId) => {
+    navigate(`/admin/edit/${userId}`);
   };
 
-  const handleDelete = () => {
-    navigate('/admin/dashboard');
+
+
+  const handleDelete = async (userId) => {
+    try {
+      await fetch(`/server/admin/deleteUser/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+      // Refresh users list after delete
+      setUsers(users.filter(user => user._id !== userId));
+    } catch (error) {
+      console.log(error);
+    }
   };
+
 
   return (
     <div className='relative h-screen '>
@@ -31,29 +67,31 @@ const adminDashboard = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Jasna</td>
-              <td>jasna@gmail.com</td>
-              <td>Image</td>
-              <td>Verified</td>
-              <td>
-                <button
-                  onClick={handleEdit}
-                  className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
-                >
-                  Edit
-                </button>
-              </td>
-              <td>
-                <button
-                  onClick={handleDelete}
-                  className="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
+            {users.map((user, index) => (
+              <tr key={user._id}>
+                <td>{index + 1}</td>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                <td><img src={user.profilePicture} alt="" /></td>
+                <td>{user.verified ? "Yes" : "No"}</td>
+                <td>
+                  <button
+                    onClick={() => handleEdit(user._id)}
+                    className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
+                  >
+                    Edit
+                  </button>
+                </td>
+                <td>
+                  <button
+                    onClick={() => handleDelete(user._id)}
+                    className="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </Table>
       </div>

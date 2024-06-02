@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import OAuth from '../../components/OAuth'
-
-import { ToastContainer, toast } from 'react-toastify';
+import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const signup = () => {
@@ -10,16 +9,21 @@ const signup = () => {
   const [error,setError]=useState(false)
   const [loading,setLoading]=useState(false)
   const navigate=useNavigate()
+
+  const notify = () => toast("Account Already Exist !");
+
  const handleChange=((e)=>{
   setFormData({...formData,[e.target.id]:e.target.value})
  })
+
  const handleSubmit=async(e)=>{
   e.preventDefault()
+
 console.log("formData is >>>>!!@@@" , formData);
 console.log("step0");
   try {
-      // setLoading(true)
-      // setError(false)
+      setLoading(true)
+      setError(false)
       const res=await fetch('/server/auth/signup',{
           method:'POST',
           headers:{
@@ -34,6 +38,8 @@ console.log("step0");
       setLoading(false)
       if(data.success===false)
       {
+        console.log("sign up error is",error);
+        notify()
           setError(true)
           return;
       }
@@ -89,6 +95,10 @@ console.log("step0");
         
      </div>
       </div>
+      <ToastContainer 
+      position='top-center'
+      theme='dark'
+      transition={Bounce}/>
     </div>
   )
 }

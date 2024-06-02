@@ -17,6 +17,7 @@ export const signin = async (req, res, next) => {
     if (!validPassword) return next(errorHandler(401, 'wrong credentials'));
     const token = jwt.sign({ id: validAdmin._id }, process.env.JWT_SECRET);
     const { password: hashedPassword, ...rest } = validAdmin._doc;
+    console.log("valid admin deatisls",validAdmin);
     const expiryDate = new Date(Date.now() + 3600000); // 1 hour
     res
       .cookie('access_token', token, { httpOnly: true, expires: expiryDate })

@@ -16,7 +16,7 @@ import backgroundVideo from '../public/mainBg.mp4'
 
 const App = () => {
   return (
-    <div className='relative w-full h-screen'>
+    <div className='relative w-full h-full'>
        <video autoPlay loop muted className='absolute inset-0 w-full h-full object-cover'>
         <source src={backgroundVideo} type='video/mp4' />
       </video>

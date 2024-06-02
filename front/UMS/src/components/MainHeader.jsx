@@ -6,17 +6,14 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 
 const Header = () => {
-
     const {currentUser}=useSelector((state)=>state.user)
   return (
-    <div className='bg-blue-950'>
+    <div className='bg-slate-900'>
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
         <Link to='/'>
           <h1 className='font-bold text-red-600'>Welcome To React</h1>
         </Link>
         <ul className='flex gap-4'>
-        
-
                 <li>
                 {['Success'].map(
         (variant) => (
@@ -34,9 +31,6 @@ const Header = () => {
         ),
       )}
                 </li>
- 
-            
-      
         </ul>
       </div>
     </div>
