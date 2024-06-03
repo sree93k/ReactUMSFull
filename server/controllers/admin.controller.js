@@ -49,6 +49,31 @@ export const updateAdmin=async(req,res,next)=>{
     }
 }
 
+export const updateVerifiedStatus=async(req,res,next)=>{
+    console.log("step 1");
+    try {
+        console.log("step 2");
+        const userID=req.params.id
+        console.log("verifdied statys",req.body.verified);
+        const verified=req.body.verified
+        console.log("userID is",userID);
+        console.log("step 3");
+        const currentUser = await User.findByIdAndUpdate(
+            { _id: userID }, 
+            { $set: { verified: verified } },
+            { new: true }
+          );
+          console.log("step 4");
+        console.log("current User",currentUser);
+        console.log("step 5");
+        res.status(200).json()
+        console.log("step 6");
+    } catch (error) {
+        console.log("erorr is",error);
+        next(error)
+    }
+}
+
 
 export const updateUser=async()=>{
     try {

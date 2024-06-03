@@ -9,6 +9,7 @@ import AdminSignIn from './pages/admin/adminSignin';
 import AdminHome from './pages/admin/adminHome';
 import AdminEdit from './pages/admin/adminEdit';
 import AdminDashboard from './pages/admin/adminDashboard';
+import AdminEditPassword from './pages/admin/adminEditPassword'
 import HeaderRenderer from './components/HeaderRender';
 import EditProfile from './pages/user/edit'
 import ResetPassowrd from './pages/user/passwordEdit'
@@ -33,8 +34,9 @@ const App = () => {
           <Route path="/user/resetPassword" element={<ResetPassowrd />} />
           <Route path="/admin/signin" element={<AdminSignIn />} />
           <Route path="/admin/home" element={<AdminHome />} />
-          <Route path="/admin/edit" element={<AdminEdit />} />
+          <Route path="/admin/edit/:userId" element={<AdminEdit />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/changepassword" element={<AdminEditPassword/>}/>
         </Routes>
       </BrowserRouter>
       </div>

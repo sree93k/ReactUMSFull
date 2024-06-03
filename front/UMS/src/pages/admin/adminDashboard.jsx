@@ -48,6 +48,32 @@ const adminDashboard = () => {
     }
   };
 
+  const handleToggleVerified = async (userId, currentStatus) => {
+    try {
+      console.log("yess");
+      console.log("userid",userId,"and ",currentStatus);
+      const res = await fetch(`/server/admin/updateVerifiedStatus/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ verified: !currentStatus })
+      });
+      
+      if (res.ok) {
+        // Update the state to reflect the change
+        setUsers(users.map(user =>
+          user._id === userId ? { ...user, verified: !currentStatus } : user
+        ));
+      } else {
+        console.log('Error updating verification status');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+
 
   return (
     <div className='relative h-screen '>
@@ -57,24 +83,36 @@ const adminDashboard = () => {
         <Table striped bordered hover className="min-w-full">
           <thead>
             <tr>
-              <th>SI NO</th>
-              <th>Name</th>
-              <th>Email ID</th>
-              <th>Image</th>
-              <th>Verified</th>
-              <th>Edit</th>
-              <th>Delete</th>
+              <th className=' text-center align-middle'>SI NO</th>
+              <th className=' text-center align-middle'>Name</th>
+              <th className=' text-center align-middle'>Email ID</th>
+              <th className=' text-center align-middle'>Image</th>
+              <th className=' text-center align-middle'>Verified</th>
+              <th className=' text-center align-middle'>Edit</th>
+              <th className=' text-center align-middle'>Delete</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody >
             {users.map((user, index) => (
               <tr key={user._id}>
-                <td>{index + 1}</td>
-                <td>{user.username}</td>
-                <td>{user.email}</td>
-                <td><img src={user.profilePicture} alt="" /></td>
-                <td>{user.verified ? "Yes" : "No"}</td>
-                <td>
+                <td className=' text-center align-middle'>{index + 1}</td>
+                <td className=' align-middle'>{user.username}</td>
+                <td className=' align-middle'>{user.email}</td>
+                <td className=' text-center align-middle'><img className='w-16 h-16 object-cover' src={user.profilePicture} alt="" /></td>
+          
+                <td className='text-center align-middle'>
+                  <label className="inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={user.verified}
+                      onChange={() => handleToggleVerified(user._id, user.verified)}
+                      className="sr-only peer"
+                    />
+                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-white-800 rounded-full peer dark:bg-red-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+                  </label>
+                </td>
+
+                <td className='  align-middle'>
                   <button
                     onClick={() => handleEdit(user._id)}
                     className="bg-blue-500 text-white py-1 px-2 rounded hover:bg-blue-600"
@@ -82,7 +120,7 @@ const adminDashboard = () => {
                     Edit
                   </button>
                 </td>
-                <td>
+                <td className=' align-middle'>
                   <button
                     onClick={() => handleDelete(user._id)}
                     className="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600"
