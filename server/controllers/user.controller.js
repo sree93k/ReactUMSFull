@@ -20,10 +20,10 @@ export const updateUser=async(req,res,next)=>{
     }
     try {
         console.log("update user step 3");
-        if(req.body.password) {
-            console.log("update user step 4");
-            req.body.password= bcryptjs.hashSync(req.body.password,10)
-        }
+        // if(req.body.password) {
+        //     console.log("update user step 4");
+        //     req.body.password= bcryptjs.hashSync(req.body.password,10)
+        // }
         console.log("update user step 5")
         const updatedUser=await User.findByIdAndUpdate(
             req.params.id,

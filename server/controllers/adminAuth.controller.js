@@ -9,6 +9,7 @@ export const signin = async (req, res, next) => {
   console.log("Admin signin auth controller");
   const { email, password } = req.body;
   console.log("admin details",req.body);
+  console.log(email);
   try {
     const validAdmin = await Admin.findOne({ email });
     console.log("admin details",validAdmin);

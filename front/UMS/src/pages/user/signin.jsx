@@ -14,6 +14,12 @@ const Signin = () => {
    const navigate=useNavigate()
     const dispatch=useDispatch()
     const notify = (error) => toast(error);
+
+    useEffect(()=>{
+      document.title="UMS User"
+
+      return ()=>{document.title=""}
+    },[]) 
     useEffect(() => {
       if (error) {
           dispatch(signInFailure(null));
@@ -47,7 +53,7 @@ const Signin = () => {
             console.log("failure sign in");
             console.log("new error",error)
             error?notify("Invalid Input"):notify("Account Not Found")
-            notify()
+            // notify()
               dispatch(signInFailure(data))
               return;
           }

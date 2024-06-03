@@ -36,7 +36,7 @@ const App = () => {
           <Route path="/admin/home" element={<AdminHome />} />
           <Route path="/admin/edit/:userId" element={<AdminEdit />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/changepassword" element={<AdminEditPassword/>}/>
+          <Route path="/admin/changepassword/:userId" element={<AdminEditPassword/>}/>
         </Routes>
       </BrowserRouter>
       </div>

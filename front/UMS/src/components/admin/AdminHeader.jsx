@@ -1,16 +1,28 @@
 
 import React, { useEffect, useState } from 'react'
 import {Link} from 'react-router-dom'
-import {useSelector} from 'react-redux'
+import {useSelector,useDispatch} from 'react-redux'
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
+import { updateUserStart,updateUserSuccess,updateUserFailure, deleteUserStart,deleteUserSuccess,deleteUserFailure,signOut } from '../../redux/user/userSlice'
 
 const Header = () => {
-
+  const dispatch=useDispatch()
     const {currentAdmin}=useSelector((state)=>state.admin)
     console.log("current Admin details",currentAdmin);
     console.log("currentAdmin is >>@@##$$",currentAdmin);
+
+
+    const handleSignOut=async()=>{
+      try {
+        await fetch('/server/auth/signout')
+        dispatch(signOut())
+        nava
+      } catch (error) {
+        console.log(error);
+      }
+    }
    
   return (
     <div className='bg-slate-900'>
@@ -34,7 +46,7 @@ const Header = () => {
                           variant={variant.toLowerCase()}
                           title={"Login"}
                         >
-                          <Dropdown.Item eventKey="1"><Link to='/admin/signin'>Logout</Link></Dropdown.Item>
+                          <Dropdown.Item eventKey="1" onClick={handleSignOut}>Logout</Dropdown.Item>
                           
                         </DropdownButton>
                       ),

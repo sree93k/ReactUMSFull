@@ -3,15 +3,24 @@ import { Link,useNavigate } from 'react-router-dom';
 import backgroundVideo from '../../../public/mainBg.mp4';
 import  {signInStart,signInSuccess,signInFailure} from '../../redux/admin/adminSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { Bounce, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminSignin = () => {
 
   const [formData,setFormData]=useState({})
    const {loading,error}=useSelector((state)=>state.user)
 
+
    const navigate=useNavigate()
     const dispatch=useDispatch()
 
+    useEffect(()=>{
+      document.title="UMS Admin"
+
+      return ()=>{document.title=""}
+    },[])
+    const notify = (error) => toast(error);
     useEffect(() => {
       if (error) {
           dispatch(signInFailure(null));
@@ -40,9 +49,13 @@ const AdminSignin = () => {
           })
           const data=await res.json()
           console.log("the data in sign admin",data);
+        
           if(data.success===false)
           {
+            console.log("step false");
+            notify(data.message)
               dispatch(signInFailure(data))
+              
               return;
           }
          
@@ -84,6 +97,11 @@ const AdminSignin = () => {
         </form>
       
       </div>
+      <ToastContainer 
+      position='top-center'
+      theme='dark'
+      transition={Bounce}/>
+    
     </div>
   );
 }

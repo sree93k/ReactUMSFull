@@ -9,7 +9,6 @@ const adminDashboard = () => {
   useEffect(()=>{
      const ftechUsers=async()=>{
       try {
-        
         const res=await fetch('/server/admin/allUsers',{
           method:'GET',
           headers:{
