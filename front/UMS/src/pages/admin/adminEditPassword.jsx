@@ -1,6 +1,6 @@
 import React,{useEffect, useState} from 'react'
 import { useNavigate ,useParams} from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import {  useDispatch } from 'react-redux';
 import { updateUserStart, updateUserSuccess, updateUserFailure } from '../../redux/user/userSlice';
 
 const adminEditPassword = () => {
@@ -8,6 +8,8 @@ const adminEditPassword = () => {
     const [formData,setFormData]=useState({})
     const { userId } = useParams(); 
     const dispatch=useDispatch()
+
+
     const handleChange = (e) => {
       setFormData({...formData,[e.target.id]:e.target.value})
     } 

@@ -1,10 +1,13 @@
 import React ,{useState,useEffect,useRef}from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector,useDispatch } from 'react-redux';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { app } from '../../../firbase'; 
 import { updateUserStart,updateUserSuccess,updateUserFailure, deleteUserStart,deleteUserSuccess,deleteUserFailure,signOut } from '../../redux/user/userSlice'
 import Swal from 'sweetalert2'
 
-const edit = () => { const [image,setImage]=useState(undefined)
+const edit = () => {
+   const [image,setImage]=useState(undefined)
   const [imagePercent,setImagePercent]=useState(0)
   const [imageError,setImageError]=useState(false)
   const [formData,setFormData]=useState({})
@@ -23,6 +26,38 @@ const edit = () => { const [image,setImage]=useState(undefined)
    });
   }
   }, [currentUser]);
+  useEffect(() => {
+    if (image) {
+      handleFileUpload(image);
+    }
+  }, [image]);
+
+  const handleFileUpload = async (image) => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + image.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, image);
+    console.log("upload task",uploadTask);
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        console.log("step 1");
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setImagePercent(Math.round(progress));
+      },
+      (error) => {
+        console.log("step 2",error);
+        setImageError(true);
+      },
+      () => {
+        console.log("step 3");
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
+          setFormData({ ...formData, profilePicture: downloadURL })
+        );
+      }
+    );
+  };
+
 
   const handleChange = (e) => {
     console.log("set form Dtata",formData,e.target.value);
@@ -50,6 +85,25 @@ const edit = () => { const [image,setImage]=useState(undefined)
       }
       dispatch(updateUserSuccess(data))
       setUpdateSuccess(true);
+      Swal.fire({
+        title: "Updated",
+        icon:"success",
+        timer: 1000,
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+          const b = Swal.getHtmlContainer().querySelector('b');
+          if (b) {
+            const timerInterval = setInterval(() => {
+              b.textContent = `${Swal.getTimerLeft()}`;
+            }, 100);
+            Swal.getHtmlContainer().addEventListener('willClose', () => {
+              clearInterval(timerInterval);
+            });
+          }
+        }
+      });
+      navigate('/user/home')
     } catch (error) {
       dispatch(updateUserFailure(error))
     }
@@ -72,12 +126,11 @@ const edit = () => { const [image,setImage]=useState(undefined)
       buttonsStyling: false
     });
     swalWithBootstrapButtons.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Confirm Delete Account?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "No, cancel!",
+      confirmButtonText: "Confrim",
+      cancelButtonText: "Cancel",
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
@@ -112,10 +165,22 @@ const edit = () => { const [image,setImage]=useState(undefined)
         /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel
       ) {
-        swalWithBootstrapButtons.fire({
+        Swal.fire({
           title: "Cancelled",
-          text: "Your imaginary file is safe :)",
-          icon: "error"
+          timer: 1000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading();
+            const b = Swal.getHtmlContainer().querySelector('b');
+            if (b) {
+              const timerInterval = setInterval(() => {
+                b.textContent = `${Swal.getTimerLeft()}`;
+              }, 100);
+              Swal.getHtmlContainer().addEventListener('willClose', () => {
+                clearInterval(timerInterval);
+              });
+            }
+          }
         });
       }
     });

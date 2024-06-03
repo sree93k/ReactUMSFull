@@ -15,10 +15,15 @@ const home = () => {
       navigate('/user/editprofile');
     };
   
-    const handleLogout = () => {
-      dispatch(signOut());
-      navigate('/user/signin');
-    };
+    // const handleLogout =async () => {
+    //   try {
+    //     await fetch('/server/auth/signout')
+    //     dispatch(signOut())
+    //     navigate('/user/signin');
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
   return (
     <div className='relative h-screen'>
     <div className='relative mt-3 z-10 p-5 max-w-lg mx-auto bg-white bg-opacity-75 rounded-lg text-center'>
@@ -37,12 +42,12 @@ const home = () => {
       </button>
       <br />
       <br />
-      <button 
+      {/* <button 
         onClick={handleLogout} 
         className='bg-red-600 text-white p-3 rounded-lg uppercase hover:opacity-95 w-full'
       >
         Logout
-      </button>
+      </button> */}
     </div>
   </div>
   )

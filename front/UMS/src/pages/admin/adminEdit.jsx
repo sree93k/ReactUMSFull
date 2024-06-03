@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { app } from '../../../firbase'; // Adjust this path as needed
+import { app } from '../../../firbase'; 
 import { updateUserStart, updateUserSuccess, updateUserFailure } from '../../redux/user/userSlice';
 
 const AdminEdit = () => {
@@ -25,7 +25,7 @@ const AdminEdit = () => {
   }, [image]);
 
   useEffect(() => {
-    // Fetch user data here and set it to formData
+    
     const fetchUserData = async () => {
       try {
         console.log("step 0");
