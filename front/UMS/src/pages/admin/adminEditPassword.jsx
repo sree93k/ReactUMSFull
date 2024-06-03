@@ -2,6 +2,7 @@ import React,{useEffect, useState} from 'react'
 import { useNavigate ,useParams} from 'react-router-dom';
 import {  useDispatch } from 'react-redux';
 import { updateUserStart, updateUserSuccess, updateUserFailure } from '../../redux/user/userSlice';
+import Swal from 'sweetalert2'
 
 const adminEditPassword = () => {
     const navigate = useNavigate();
@@ -35,12 +36,47 @@ const adminEditPassword = () => {
             {
               console.log("error");
               dispatch(updateUserFailure(data))
+              Swal.fire({
+                title: "Password Not Matching",
+                icon:"error",
+                timer: 1000,
+                timerProgressBar: true,
+                didOpen: () => {
+                  Swal.showLoading();
+                  const b = Swal.getHtmlContainer().querySelector('b');
+                  if (b) {
+                    const timerInterval = setInterval(() => {
+                      b.textContent = `${Swal.getTimerLeft()}`;
+                    }, 100);
+                    Swal.getHtmlContainer().addEventListener('willClose', () => {
+                      clearInterval(timerInterval);
+                    });
+                  }
+                }
+              });
               return;
             }
             console.log("yes 1");
             dispatch(updateUserSuccess(data))
       
-            console.log("admin passowrd resett sucess");
+            Swal.fire({
+              title: "Password Updated Successfully",
+              icon:"success",
+              timer: 1000,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading();
+                const b = Swal.getHtmlContainer().querySelector('b');
+                if (b) {
+                  const timerInterval = setInterval(() => {
+                    b.textContent = `${Swal.getTimerLeft()}`;
+                  }, 100);
+                  Swal.getHtmlContainer().addEventListener('willClose', () => {
+                    clearInterval(timerInterval);
+                  });
+                }
+              }
+            });
             navigate('/admin/dashboard')
           } catch (error) {
             dispatch(updateUserFailure(error))

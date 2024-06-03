@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { app } from '../../../firbase'; 
 import { updateUserStart, updateUserSuccess, updateUserFailure } from '../../redux/user/userSlice';
+import Swal from 'sweetalert2'
 
 const AdminEdit = () => {
   const { userId } = useParams();
@@ -89,13 +90,67 @@ const AdminEdit = () => {
       });
       const data = await res.json();
       if (data.success === false) {
+        Swal.fire({
+          title: "Incorrect Password",
+          icon:"error",
+          timer: 1000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading();
+            const b = Swal.getHtmlContainer().querySelector('b');
+            if (b) {
+              const timerInterval = setInterval(() => {
+                b.textContent = `${Swal.getTimerLeft()}`;
+              }, 100);
+              Swal.getHtmlContainer().addEventListener('willClose', () => {
+                clearInterval(timerInterval);
+              });
+            }
+          }
+        });
         dispatch(updateUserFailure(data));
         return;
       }
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
+      Swal.fire({
+        title: "Updated Successfully",
+        icon:"success",
+        timer: 1000,
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+          const b = Swal.getHtmlContainer().querySelector('b');
+          if (b) {
+            const timerInterval = setInterval(() => {
+              b.textContent = `${Swal.getTimerLeft()}`;
+            }, 100);
+            Swal.getHtmlContainer().addEventListener('willClose', () => {
+              clearInterval(timerInterval);
+            });
+          }
+        }
+      });
       navigate('/admin/dashboard')
     } catch (error) {
+      Swal.fire({
+        title: error,
+        icon:"error",
+        timer: 1000,
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+          const b = Swal.getHtmlContainer().querySelector('b');
+          if (b) {
+            const timerInterval = setInterval(() => {
+              b.textContent = `${Swal.getTimerLeft()}`;
+            }, 100);
+            Swal.getHtmlContainer().addEventListener('willClose', () => {
+              clearInterval(timerInterval);
+            });
+          }
+        }
+      });
       dispatch(updateUserFailure(error));
     }
   };
@@ -130,7 +185,7 @@ const AdminEdit = () => {
           />
           <img
             onClick={() => fileRef.current.click()}
-            src={formData.profilePicture || currentUser.profilePicture}
+            src={formData.profilePicture }
             alt="profile"
             className="h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2"
           />

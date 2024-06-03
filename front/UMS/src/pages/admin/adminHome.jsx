@@ -17,7 +17,7 @@ const handleLogout = () => {
 };
   return (
     <div className='relative h-screen'>
-    <div className="relative z-10 p-0 max-w-lg mx-auto flex items-center justify-center  bg-gray-100">
+    <div className="relative mt-20 z-10 p-0 max-w-lg mx-auto flex items-center justify-center  bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-full w-full text-center">
         <h1 className="text-3xl font-bold mb-4">Admin Home</h1>
         <h2 className="text-xl font-semibold mb-6">Welcome, <span className='text-lg uppercase'>{currentAdmin?currentAdmin.adminname:""}</span></h2>

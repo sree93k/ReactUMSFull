@@ -166,13 +166,13 @@ export const updatePassword=async(req,res,next)=>{
             else
             {
                 console.log("step 4 ");
-                res.status(404).json("Password Not Matching")
+                next("Password Not Matching")
             }
         }
         else
         {
             console.log("step 5 ");
-            res.status(404).json("Error Occured")
+           next("Error Occured")
         }
         
     } catch (error) {

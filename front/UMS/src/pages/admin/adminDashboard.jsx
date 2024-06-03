@@ -97,7 +97,7 @@ const adminDashboard = () => {
                 <td className=' text-center align-middle'>{index + 1}</td>
                 <td className=' align-middle'>{user.username}</td>
                 <td className=' align-middle'>{user.email}</td>
-                <td className=' text-center align-middle'><img className='w-16 h-16 object-cover' src={user.profilePicture} alt="" /></td>
+                <td className=' text-center align-middle'><img className='w-16 h-16 object-cover' src={user.profilePicture?(user.profilePicture):("profile picture")} alt="" /></td>
           
                 <td className='text-center align-middle'>
                   <label className="inline-flex items-center cursor-pointer">

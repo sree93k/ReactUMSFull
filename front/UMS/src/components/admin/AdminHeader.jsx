@@ -27,12 +27,15 @@ const Header = () => {
   return (
     <div className='bg-slate-900'>
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
-        <Link to='/admin/home'>
-          <h1 className='font-bold text-blue-600'>Welcome  {currentAdmin?currentAdmin.adminname:""}</h1>
-        </Link>
-        <Link to='/admin/home'> 
-            <h5>Home</h5>
+        {currentAdmin?(
+            <Link to='/admin/home'>
+            <h1 className='font-bold text-blue-600'>Welcome  {currentAdmin?currentAdmin.adminname:""}</h1>
           </Link>
+        ):(
+          <Link to='/'>
+          <h1 className='font-bold text-blue-600'>Welcome To Admin Portal</h1>
+        </Link>
+        )}
         <ul className='flex gap-4'>
 
                 <li>
