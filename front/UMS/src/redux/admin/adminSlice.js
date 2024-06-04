@@ -10,24 +10,48 @@ const adminSlice = createSlice({
   name: 'admin',
   initialState,
   reducers: {
-    signInStart: (state) => {
-      state.loading = true;
-      state.error = false;
-    },
-    signInSuccess: (state, action) => {
-      state.currentAdmin = action.payload;
-      state.loading = false;
-      state.error = false;
-    },
-    signInFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    signOut: (state) => {
-      state.currentAdmin = null;
-      state.loading = false;
-      state.error = false;
-    },
+    signInStart:(state)=>{
+      state.loading=true
+      state.error=false
+  },
+  signInSuccess:(state,action)=>{
+      state.currentAdmin=action.payload
+      state.loading=false
+      state.error=false
+  },
+  signInFailure:(state,action)=>{
+      state.loading=false
+      state.error=action.payload
+  },
+ updateAdminStart:(state)=>{
+      state.loading=true
+ },
+ updateAdminSuccess:(state,action)=>{
+      state.currentAdmin=action.payload
+      state.loading=false
+      state.error=false
+ },
+ updateAdminFailure:(state,action)=>{
+      state.loading=false
+      state.error=action.payload;
+  },
+  deleteAdminStart:(state)=>{
+      state.loading=true
+ },
+ deleteAdminSuccess:(state)=>{
+      state.currentAdmin=null
+      state.loading=false
+      state.error=false
+ },
+ deleteUserFailure:(state,action)=>{
+      state.loading=false
+      state.error=action.payload;
+  },
+  signOut:(state)=>{
+      state.currentAdmin=null
+      state.loading=false
+      state.error=false
+  }
   },
 });
 

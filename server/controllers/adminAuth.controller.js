@@ -11,7 +11,7 @@ export const signin = async (req, res, next) => {
   console.log("admin details",req.body);
   console.log(email);
   try {
-    const validAdmin = await Admin.findOne({ email });
+    const validAdmin = await Admin.findOne({email});
     console.log("admin details",validAdmin);
     if (!validAdmin) return next(errorHandler(404, 'Admin not found'));
     const validPassword = bcryptjs.compareSync(password, validAdmin.password);
@@ -32,6 +32,7 @@ export const signin = async (req, res, next) => {
 
 
 export const signout = (req, res) => {
+  console.log("signout admin successfully....");
   res.clearCookie('access_token').status(200).json('Signout success!');
   
 };

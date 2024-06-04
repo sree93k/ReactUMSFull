@@ -3,6 +3,8 @@ import { useNavigate ,useParams} from 'react-router-dom';
 import {  useDispatch } from 'react-redux';
 import { updateUserStart, updateUserSuccess, updateUserFailure } from '../../redux/user/userSlice';
 import Swal from 'sweetalert2'
+import { ToastContainer, toast ,Bounce} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const adminEditPassword = () => {
     const navigate = useNavigate();
@@ -10,6 +12,7 @@ const adminEditPassword = () => {
     const { userId } = useParams(); 
     const dispatch=useDispatch()
 
+    const notify = (err) => toast(err);
 
     const handleChange = (e) => {
       setFormData({...formData,[e.target.id]:e.target.value})
@@ -34,26 +37,11 @@ const adminEditPassword = () => {
             console.log("data ststus",data);
             if(data.success===false)
             {
-              console.log("error");
+              console.log("error",data);
               dispatch(updateUserFailure(data))
-              Swal.fire({
-                title: "Password Not Matching",
-                icon:"error",
-                timer: 1000,
-                timerProgressBar: true,
-                didOpen: () => {
-                  Swal.showLoading();
-                  const b = Swal.getHtmlContainer().querySelector('b');
-                  if (b) {
-                    const timerInterval = setInterval(() => {
-                      b.textContent = `${Swal.getTimerLeft()}`;
-                    }, 100);
-                    Swal.getHtmlContainer().addEventListener('willClose', () => {
-                      clearInterval(timerInterval);
-                    });
-                  }
-                }
-              });
+              console.log("notify 1");
+              notify(data.message)
+              console.log("notify 2");
               return;
             }
             console.log("yes 1");
@@ -124,6 +112,11 @@ const adminEditPassword = () => {
           </button>
         </form>
       </div>
+      <ToastContainer 
+       position='top-center'
+       theme='dark'
+       transition={Bounce}
+       />
     </div>
   )
 }

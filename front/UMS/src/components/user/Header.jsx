@@ -64,11 +64,17 @@ const Header = () => {
             ) : (
               <div className='relative'>
                 <Dropdown>
-                  <Dropdown.Toggle as='div' className='flex items-center cursor-pointer'>
+                  <Dropdown.Toggle as='div' className='flex flex-col justify-center items-center cursor-pointer'>
+                    <div className='flex items-center cursor-pointer'> 
                     <img src={currentUser.profilePicture} alt="Profile" className='w-8 h-8 rounded-full' />
-                    <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                    <svg className="w-4 h-4 ml-0 fill-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     </svg>
+                    </div>
+                    <div className='mt-1'>
+                    <span className='text-white'>Me</span>
+                    </div>
+                   
+                    
                   </Dropdown.Toggle>
                   <Dropdown.Menu className='absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg'>
                     <Dropdown.Item eventKey="1">

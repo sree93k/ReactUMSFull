@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import { useNavigate } from 'react-router-dom'; 
-
+import Swal from 'sweetalert2'
+import { ToastContainer, toast ,Bounce} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const adminDashboard = () => {
   const [users,setUsers]=useState([])
   const navigate = useNavigate();
+  const notify = (err) => toast(err); 
 
   useEffect(()=>{
      const ftechUsers=async()=>{
@@ -34,14 +37,84 @@ const adminDashboard = () => {
 
   const handleDelete = async (userId) => {
     try {
-      await fetch(`/server/admin/deleteUser/${userId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
+      const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: "btn btn-success",
+          cancelButton: "btn btn-danger"
         },
+        buttonsStyling: false
       });
-      // Refresh users list after delete
-      setUsers(users.filter(user => user._id !== userId));
+      swalWithBootstrapButtons.fire({
+        title: "Confirm Delete Account?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Confirm",
+        cancelButtonText: "Cancel",
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log("step 1 handle delete");
+          const deleteConfrim=async()=>{
+            await fetch(`/server/admin/deleteUser/${userId}`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+            });
+            setUsers(users.filter(user => user._id !== userId));
+          }
+          deleteConfrim()
+          let timerInterval;
+          Swal.fire({
+            title: "Deleted",
+            icon:"success",
+            timer: 800,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading();
+              const timer = Swal.getPopup().querySelector("b");
+              timerInterval = setInterval(() => {
+                timer.textContent = `${Swal.getTimerLeft()}`;
+              }, 100);
+            },
+            willClose: () => {
+              clearInterval(timerInterval);
+            }
+          }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+              console.log("I was closed by the timer");
+            }
+          });
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          let timerInterval;
+          Swal.fire({
+            title: "Cancelled",
+            icon:"success",
+            timer: 800,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading();
+              const timer = Swal.getPopup().querySelector("b");
+              timerInterval = setInterval(() => {
+                timer.textContent = `${Swal.getTimerLeft()}`;
+              }, 100);
+            },
+            willClose: () => {
+              clearInterval(timerInterval);
+            }
+          }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+              console.log("I was closed by the timer");
+            }
+          });
+        }
+      });
+      
     } catch (error) {
       console.log(error);
     }
@@ -61,13 +134,17 @@ const adminDashboard = () => {
       
       if (res.ok) {
         // Update the state to reflect the change
+        const validatedStatus=currentStatus?("Validation Cancelled"):("Validated");
         setUsers(users.map(user =>
           user._id === userId ? { ...user, verified: !currentStatus } : user
         ));
+        notify(validatedStatus)
       } else {
+        notify('Error updating verification status')
         console.log('Error updating verification status');
       }
     } catch (error) {
+      notify(error.message)
       console.log(error);
     }
   };
@@ -132,7 +209,13 @@ const adminDashboard = () => {
           </tbody>
         </Table>
       </div>
+      <ToastContainer 
+       position='top-center'
+       theme='dark'
+       transition={Bounce}
+       />
     </div>
+  
 
   );
 };

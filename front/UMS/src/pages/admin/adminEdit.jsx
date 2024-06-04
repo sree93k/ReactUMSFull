@@ -5,6 +5,8 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/
 import { app } from '../../../firbase'; 
 import { updateUserStart, updateUserSuccess, updateUserFailure } from '../../redux/user/userSlice';
 import Swal from 'sweetalert2'
+import { ToastContainer, toast ,Bounce} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminEdit = () => {
   const { userId } = useParams();
@@ -18,6 +20,8 @@ const AdminEdit = () => {
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const fileRef = useRef(null);
+
+  const notify = (err) => toast(err); 
 
   useEffect(() => {
     if (image) {
@@ -52,7 +56,8 @@ const AdminEdit = () => {
     const fileName = new Date().getTime() + image.name;
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, image);
-    console.log("upload task",uploadTask);
+    console.log("upload task",uploadTask); 
+
     uploadTask.on(
       'state_changed',
       (snapshot) => {
@@ -80,6 +85,8 @@ const AdminEdit = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log("form data in edi t handle submit",formData);
+
       dispatch(updateUserStart());
       const res = await fetch(`/server/admin/updateUser/${userId}`, {
         method: 'POST',
@@ -90,24 +97,9 @@ const AdminEdit = () => {
       });
       const data = await res.json();
       if (data.success === false) {
-        Swal.fire({
-          title: "Incorrect Password",
-          icon:"error",
-          timer: 1000,
-          timerProgressBar: true,
-          didOpen: () => {
-            Swal.showLoading();
-            const b = Swal.getHtmlContainer().querySelector('b');
-            if (b) {
-              const timerInterval = setInterval(() => {
-                b.textContent = `${Swal.getTimerLeft()}`;
-              }, 100);
-              Swal.getHtmlContainer().addEventListener('willClose', () => {
-                clearInterval(timerInterval);
-              });
-            }
-          }
-        });
+        console.log("notify 1");
+        notify(data.message)
+        console.log("notify 2");
         dispatch(updateUserFailure(data));
         return;
       }
@@ -133,24 +125,9 @@ const AdminEdit = () => {
       });
       navigate('/admin/dashboard')
     } catch (error) {
-      Swal.fire({
-        title: error,
-        icon:"error",
-        timer: 1000,
-        timerProgressBar: true,
-        didOpen: () => {
-          Swal.showLoading();
-          const b = Swal.getHtmlContainer().querySelector('b');
-          if (b) {
-            const timerInterval = setInterval(() => {
-              b.textContent = `${Swal.getTimerLeft()}`;
-            }, 100);
-            Swal.getHtmlContainer().addEventListener('willClose', () => {
-              clearInterval(timerInterval);
-            });
-          }
-        }
-      });
+      console.log("notify 1");
+              notify(error)
+              console.log("notify 2");
       dispatch(updateUserFailure(error));
     }
   };
@@ -231,6 +208,11 @@ const AdminEdit = () => {
           Need to change password?
         </button>
       </div>
+      <ToastContainer 
+       position='top-center'
+       theme='dark'
+       transition={Bounce}
+       />
     </div>
   );
 };

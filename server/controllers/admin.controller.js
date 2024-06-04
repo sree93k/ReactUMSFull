@@ -2,7 +2,8 @@ import Admin from "../models/admin.model.js"
 import { errorHandler } from "../utils/error.js"
 import bcryptjs from 'bcryptjs'
 import User from '../models/user.model.js'
-import { ObjectId } from "mongoose"
+import validator from 'validator';
+
 export const test=(req,res)=>{
     res.json({message:"API is working"})
 }
@@ -83,7 +84,8 @@ export const editUser=async(req,res,next)=>{
         console.log("res aprams is",userID);
         const userDetails=await User.findById({_id:userID})
         console.log("user detaiuks",userDetails);
-        res.status(200).json(userDetails)
+        const {password,...rest}=userDetails._doc;
+        res.status(200).json(rest)
     } catch (error) {
         next(error)
     }
@@ -94,17 +96,34 @@ export const updateUser=async(req,res,next)=>{
     console.log("admin update user step 1");
     console.log("params id",req.params.id);
     console.log("body is",req.body);
+   
     if(req.body._id!==req.params.id)
     {
         console.log("update user step 2");
         return next(errorHandler(401,"You can update only account !"))
     }
+    const userAccount=await User.findById(req.params.id)
+    const nameCompare=validator.equals(req.body.username,userAccount.username)
+    const emailCompare=validator.equals(req.body.email,userAccount.email)
+    const profileCompare=validator.equals(req.body.profilePicture,userAccount.profilePicture)
+    if(nameCompare && emailCompare && profileCompare)
+    {
+        console.log("no chnage found");
+        return next(errorHandler(401,"No changes Found"))
+    }
+
+    const emailValidator=validator.isEmail(req.body.email)
+    const nameValidator=validator.isAlpha(req.body.username)
+
+   
+    if(!emailValidator || !nameValidator)
+    {
+        console.log("eerros validation");
+        return next(errorHandler(401,"Invalid Inputs!"))
+    }
     try {
         console.log("update user step 3");
-        // if(req.body.password) {
-        //     console.log("update user step 4");
-        //     req.body.password= bcryptjs.hashSync(req.body.password,10)
-        // }
+
         console.log("update user step 5")
         const updatedUser=await User.findByIdAndUpdate(
             req.params.id,
@@ -140,10 +159,22 @@ export const updatePassword=async(req,res,next)=>{
         console.log("step1 ");
         if(req.params.id)
         {
-            console.log("step 2 ");
-            if(password1===password2)
+            const comparePassword=validator.equals(password1,password2)
+            const strongPassword=validator.isStrongPassword(password1)
+           
+        
+            if(!comparePassword)
             {
-                console.log(userID);
+                console.log("eerros validation 1");
+                return next(errorHandler(401,"Password Not Matching"))
+            }
+            else if(!strongPassword)
+            {
+                console.log("eerros validation 2");
+                return next(errorHandler(401,"Password must contain min 8 character, min 1 UpperCase , 1 LowerCase and min 1 Symbol"))
+            }
+            console.log("step 2 ");
+              console.log(userID);
                 console.log(password1);
                 console.log(password2);
                 const passwords=bcryptjs.hashSync(password1,10)
@@ -162,12 +193,7 @@ export const updatePassword=async(req,res,next)=>{
             const {password,...rest}=userData._doc;
             console.log("step 3.2 ");
             res.status(200).json(rest)
-            }
-            else
-            {
-                console.log("step 4 ");
-                next("Password Not Matching")
-            }
+           
         }
         else
         {
@@ -177,6 +203,21 @@ export const updatePassword=async(req,res,next)=>{
         
     } catch (error) {
         console.log("step 6 ");
+        next(error)
+    }
+}
+
+
+export const deleteUser=async(req,res,next)=>{
+    console.log("step1");
+    console.log(req.body);
+    console.log(req.user);
+    console.log(req.params);
+    try {
+        await User.findByIdAndDelete(req.params.id)
+        console.log("step3");
+        res.status(200).json("User has been deleted...")
+    } catch (error) {
         next(error)
     }
 }

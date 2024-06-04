@@ -11,10 +11,21 @@ const adminHome = () => {
 const handleDashboard=()=>{
   navigate('/admin/dashboard')
 }
-const handleLogout = () => {
-  dispatch(signOut());
-  navigate('/admin/signin');
-};
+
+  
+    const handleLogout =async () => {
+      try {
+        console.log("logout 1");
+        await fetch('/server/adminAuth/signout')
+        console.log("logout 2");
+        dispatch(signOut())
+        console.log("logout 3");
+        console.log("admin sign out home");
+        navigate('/admin/signin');
+      } catch (error) {
+        console.log(error);
+      }
+    };
   return (
     <div className='relative h-screen'>
     <div className="relative mt-20 z-10 p-0 max-w-lg mx-auto flex items-center justify-center  bg-gray-100">
@@ -28,9 +39,9 @@ const handleLogout = () => {
         <h4 className="text-lg font-medium mb-2"> Name : <span className='text-lg uppercase'>{currentAdmin?currentAdmin.adminname:""}</span></h4>
         <h4 className="text-lg font-medium mb-2"> Email : {currentAdmin?currentAdmin.email:""}</h4>
         
-        <button onClick={handleLogout}  className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600">
+        {/* <button onClick={handleLogout}  className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600">
           Logout
-        </button>
+        </button> */}
       </div>
     {/* </div> */}
     </div>

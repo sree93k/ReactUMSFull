@@ -24,6 +24,13 @@ export const signin = async (req, res, next) => {
   console.log("user login data",req.body);
   try {
     const validUser = await User.findOne({ email });
+    console.log("login verified step 1");
+    if(validUser.verified===false)
+    {
+      console.log("login verified step 2");
+
+    }
+    console.log("login validation step 3");
     console.log("user Details is",validUser);
     if (!validUser) return next(errorHandler(404, 'User not found'));
     const validPassword = bcryptjs.compareSync(password, validUser.password);
@@ -86,7 +93,7 @@ export const google = async (req, res, next) => {
 };
 
 export const signout = (req, res) => {
-  console.log("signout successfully");
+  console.log("User signout successfully");
   res.clearCookie('access_token').status(200).json('Signout success!');
   
 };

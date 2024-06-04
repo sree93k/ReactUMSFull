@@ -1,24 +1,29 @@
 
 import React, { useEffect, useState } from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {useSelector,useDispatch} from 'react-redux'
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
-import { updateUserStart,updateUserSuccess,updateUserFailure, deleteUserStart,deleteUserSuccess,deleteUserFailure,signOut } from '../../redux/user/userSlice'
+import { signOut } from '../../redux/admin/adminSlice'
 
 const Header = () => {
   const dispatch=useDispatch()
+  const navigate=useNavigate()
     const {currentAdmin}=useSelector((state)=>state.admin)
     console.log("current Admin details",currentAdmin);
     console.log("currentAdmin is >>@@##$$",currentAdmin);
 
 
+    useEffect(() => {
+      console.log("currentUser in header is", currentAdmin);
+    }, [currentAdmin]);
     const handleSignOut=async()=>{
       try {
-        await fetch('/server/auth/signout')
+        await fetch('/server/adminAuth/signout')
         dispatch(signOut())
-        nava
+        console.log("admin sign out header");
+        navigate('/admin/signin')
       } catch (error) {
         console.log(error);
       }
@@ -27,14 +32,14 @@ const Header = () => {
   return (
     <div className='bg-slate-900'>
       <div className='flex justify-between items-center max-w-6xl mx-auto p-3'>
-        {currentAdmin?(
-            <Link to='/admin/home'>
-            <h1 className='font-bold text-blue-600'>Welcome  {currentAdmin?currentAdmin.adminname:""}</h1>
+        {currentAdmin==null?(
+            <Link to='/'>
+            <h1 className='font-bold text-blue-600'>Welcome To Admin Portal</h1>
           </Link>
         ):(
-          <Link to='/'>
-          <h1 className='font-bold text-blue-600'>Welcome To Admin Portal</h1>
-        </Link>
+         <Link to='/admin/home'>
+         <h1 className='font-bold text-blue-600'>Welcome  {currentAdmin?currentAdmin.adminname:""}</h1>
+       </Link>
         )}
         <ul className='flex gap-4'>
 
@@ -47,7 +52,7 @@ const Header = () => {
                           key={variant}
                           id={`dropdown-variants-${variant}`}
                           variant={variant.toLowerCase()}
-                          title={"Login"}
+                          title={"Profile"}
                         >
                           <Dropdown.Item eventKey="1" onClick={handleSignOut}>Logout</Dropdown.Item>
                           

@@ -14,16 +14,10 @@ const home = () => {
     const handleEditProfile = () => {
       navigate('/user/editprofile');
     };
-  
-    // const handleLogout =async () => {
-    //   try {
-    //     await fetch('/server/auth/signout')
-    //     dispatch(signOut())
-    //     navigate('/user/signin');
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
+    useEffect(()=>{
+        navigate('/user/home')
+    },[currentUser])
+
   return (
     <div className='relative h-screen'>
     <div className='relative mt-3 z-10 p-5 max-w-lg mx-auto bg-white bg-opacity-75 rounded-lg text-center'>

@@ -10,10 +10,13 @@ import 'react-toastify/dist/ReactToastify.css';
 const Signin = () => {
 
   const [formData,setFormData]=useState({})
-   const {loading,error}=useSelector((state)=>state.user)
+   const {currentUser,loading,error}=useSelector((state)=>state.user)
    const navigate=useNavigate()
     const dispatch=useDispatch()
     const notify = (error) => toast(error);
+
+
+
 
     useEffect(()=>{
       document.title="UMS User"
@@ -48,6 +51,7 @@ const Signin = () => {
               body:JSON.stringify(formData)
           })
           const data=await res.json()
+          console.log("the data ",data);
           if(data.success===false)
           {
             console.log("failure sign in");
