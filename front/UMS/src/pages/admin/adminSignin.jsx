@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Link,useNavigate } from 'react-router-dom';
-import backgroundVideo from '../../../public/mainBg.mp4';
 import  {signInStart,signInSuccess,signInFailure} from '../../redux/admin/adminSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { Bounce, ToastContainer, toast } from 'react-toastify';
@@ -9,24 +8,33 @@ import 'react-toastify/dist/ReactToastify.css';
 const AdminSignin = () => {
 
   const [formData,setFormData]=useState({})
-   const {loading,error}=useSelector((state)=>state.user)
-
-
+   const {currentAdmin,isLogged,error}=useSelector((state)=>state.admin)
    const navigate=useNavigate()
-    const dispatch=useDispatch()
+   const dispatch=useDispatch()
+   
+
+    useEffect(()=>{
+      if(isLogged===true)
+      {
+        navigate('/admin/home')
+      }
+    },[])
+
 
     useEffect(()=>{
       document.title="UMS Admin"
 
       return ()=>{document.title=""}
     },[])
+
+
     const notify = (error) => toast(error);
+
     useEffect(() => {
       if (error) {
           dispatch(signInFailure(null));
       }
   }, [dispatch]);
-
 
     const handleChange=((e)=>{
       setFormData({...formData,[e.target.id]:e.target.value})
@@ -35,7 +43,12 @@ const AdminSignin = () => {
      const handleSubmit=async(e)=>{
       console.log("handle submitted step 1");
       e.preventDefault()
-      
+      console.log("form datad is",formData);
+      if(!formData.email || !formData.password)
+      {
+        notify("Inputs Cannot be empty")
+        return
+      }
       try {
         console.log("handle submitted step 2");
           dispatch(signInStart())

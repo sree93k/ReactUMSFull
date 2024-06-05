@@ -12,9 +12,6 @@ const Header = () => {
   const { currentUser } = useSelector((state) => state.user);
   console.log("current user details", currentUser);
 
-  useEffect(() => {
-    console.log("currentUser in header is", currentUser);
-  }, [currentUser]);
 
   const handleSignOut = async () => {
     try {

@@ -1,14 +1,45 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch,useSelector } from 'react-redux'
 import { updateUserStart, updateUserSuccess, updateUserFailure } from '../../redux/user/userSlice';
 import Swal from 'sweetalert2'
+import { ToastContainer, toast ,Bounce} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const passwordEdit = () => {
   const navigate = useNavigate();
   const dispatch=useDispatch()
   const [formData,setFormData]=useState({})
-  const {currentUser} = useSelector((state) => state.user);
+  const {currentUser,isLogged} = useSelector((state) => state.user);
+
+  const notify = (err) => toast(err);
+
+  useEffect(()=>{
+    document.title="UMS User"
+
+    return ()=>{document.title=""}
+  },[])
+  useEffect(()=>{
+    if(!isLogged)
+    {
+     navigate('/user/signin')
+    }
+    if(!currentUser || !currentUser.verified)
+    {
+      dispatch(signOut())
+      navigate('/user/signin')
+    }
+ },[]) 
+
+ function isLogin()
+ {
+  if(currentUser===null)
+    {
+      console.log("useeddect 2");
+      dispatch(signOut())
+      navigate('/user/signin')
+    }
+ } 
 
   const handleChange = (e) => {
     setFormData({...formData,[e.target.id]:e.target.value})
@@ -16,6 +47,7 @@ const passwordEdit = () => {
 
  const handleResetPassword = async(e) => {
           e.preventDefault();
+          isLogin()
           console.log("hello");
           try {
             console.log("step 1");
@@ -32,8 +64,11 @@ const passwordEdit = () => {
             console.log("data ststus",data);
             if(data.success===false)
             {
-              console.log("error");
+              console.log("error",data);
               dispatch(updateUserFailure(data))
+              console.log("notify 1");
+              notify(data.message)
+              console.log("notify 2");
               return;
             }
             console.log("yes 1");
@@ -106,6 +141,11 @@ const passwordEdit = () => {
           </button>
         </form>
       </div>
+      <ToastContainer 
+       position='top-center'
+       theme='dark'
+       transition={Bounce}
+       />
     </div>
   )
 }

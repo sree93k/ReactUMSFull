@@ -3,7 +3,7 @@ import {test,updateUser,deleteUser,updatePassword} from '../controllers/user.con
 import { verifyToken } from '../utils/verifyUser.js'
 
 const router=express.Router()
-
+console.log(verifyToken);
 router.get('/',test)
 router.post('/update/:id',verifyToken,updateUser)
 router.delete('/delete/:id',verifyToken,deleteUser)

@@ -1,11 +1,12 @@
+
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import OAuth from '../../components/OAuth'
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Swal from 'sweetalert2'
 
-const signup = () => {
+
+const adminAddUser = () => {
+
   const [formData,setFormData]=useState({})
   const [error,setError]=useState(false)
   const [loading,setLoading]=useState(false)
@@ -13,30 +14,25 @@ const signup = () => {
 
   const notify = (err) => toast(err);
 
-  useEffect(()=>{
-    document.title="UMS User"
-
-    return ()=>{document.title=""}
-  },[])
-
  const handleChange=((e)=>{
   setFormData({...formData,[e.target.id]:e.target.value})
  })
+
+ useEffect(()=>{
+  document.title="UMS Admin"
+
+  return ()=>{document.title=""}
+},[])
 
  const handleSubmit=async(e)=>{
   e.preventDefault()
 
 console.log("formData is >>>>!!@@@" , formData);
-if(!formData.email || !formData.password || !formData.username)
-      {
-        notify("Inputs Cannot be empty")
-        return
-      }
 console.log("step0");
   try {
       setLoading(true)
       setError(false)
-      const res=await fetch('/server/auth/signup',{
+      const res=await fetch('/server/admin/createUser',{
           method:'POST',
           headers:{
               'Content-Type':'application/json'
@@ -48,6 +44,7 @@ console.log("step0");
       console.log("step2");
       console.log("data is",data)
       setLoading(false)
+      console.log("step log 1");
       if(data.success===false)
       {
         console.log("sign up error is",data.message);
@@ -63,28 +60,8 @@ console.log("step0");
           setError(true)
           return;
       }
-      let timerInterval;
-        Swal.fire({
-          title: "Account created Successfully",
-          icon:"Success",
-          timer: 800,
-          timerProgressBar: true,
-          didOpen: () => {
-            Swal.showLoading();
-            const timer = Swal.getPopup().querySelector("b");
-            timerInterval = setInterval(() => {
-              timer.textContent = `${Swal.getTimerLeft()}`;
-            }, 100);
-          },
-          willClose: () => {
-            clearInterval(timerInterval);
-          }
-        }).then((result) => {
-          if (result.dismiss === Swal.DismissReason.timer) {
-            console.log("I was closed by the timer");
-          }
-        });
-      navigate('/user/signin')
+      console.log("step log 2");
+      navigate('/admin/dashboard')
   } catch (error) {
       setLoading(false)
       setError(true)
@@ -92,12 +69,13 @@ console.log("step0");
   }
  }
 
+
   return (
-   <div className='relative w-full h-screen'>
+    <div className='relative w-full h-screen'>
 
       <div className='relative mt-3 z-10 p-3 max-w-lg mx-auto bg-white bg-opacity-75 rounded-lg '>
-        <h1 className='text-3xl text-center font-semibold my-7'>Sign Up</h1>
-        <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
+        <h1 className='text-3xl text-center font-semibold my-7'>Create New User</h1>
+        <form onSubmit={handleSubmit} className='flex flex-col gap-4 '>
           <input 
             type="text" 
             placeholder='User Name' 
@@ -120,21 +98,19 @@ console.log("step0");
             onChange={handleChange}
           />
           <button 
-            className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80' 
+            className='bg-slate-700 text-white p-3 mt-10 rounded-lg uppercase hover:opacity-95 disabled:opacity-80' 
           >
-            Sign Up
+           Create Account
           </button>
-          <OAuth/>
+        <Link to='/admin/dashboard' className=''>
+        <button 
+            className='bg-red-700  text-white p-3 mt-1 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 w-100' 
+          >
+          Cancel
+          </button>
+          </Link>
         </form>
-        <div className='flex gap-2 mt-5'>
-        <p>Have an Account ?</p>
-        <Link to='/signin'>
-        <span 
-        className='text-blue-500'
-        >Sign In</span>
-        </Link>
-        
-     </div>
+       
       </div>
       <ToastContainer 
       position='top-center'
@@ -144,4 +120,4 @@ console.log("step0");
   )
 }
 
-export default signup
+export default adminAddUser

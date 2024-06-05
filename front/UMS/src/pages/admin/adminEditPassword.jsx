@@ -1,7 +1,7 @@
 import React,{useEffect, useState} from 'react'
 import { useNavigate ,useParams} from 'react-router-dom';
 import {  useDispatch } from 'react-redux';
-import { updateUserStart, updateUserSuccess, updateUserFailure } from '../../redux/user/userSlice';
+import { updateAdminStart, updateAdminSuccess, updateAdminFailure } from '../../redux/admin/adminSlice';
 import Swal from 'sweetalert2'
 import { ToastContainer, toast ,Bounce} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,6 +14,12 @@ const adminEditPassword = () => {
 
     const notify = (err) => toast(err);
 
+    useEffect(()=>{
+      document.title="UMS Admin"
+
+      return ()=>{document.title=""}
+    },[])
+    
     const handleChange = (e) => {
       setFormData({...formData,[e.target.id]:e.target.value})
     } 
@@ -24,7 +30,7 @@ const adminEditPassword = () => {
           e.preventDefault();
           console.log("hello");
           try {
-            dispatch(updateUserStart())
+            dispatch(updateAdminStart())
             console.log("user id is",userId);
             const res=await fetch(`/server/admin/updatePassword/${userId}`,{
               method:'PUT',
@@ -38,14 +44,14 @@ const adminEditPassword = () => {
             if(data.success===false)
             {
               console.log("error",data);
-              dispatch(updateUserFailure(data))
+              dispatch(updateAdminFailure(data))
               console.log("notify 1");
               notify(data.message)
               console.log("notify 2");
               return;
             }
             console.log("yes 1");
-            dispatch(updateUserSuccess(data))
+            dispatch(updateAdminSuccess(data))
       
             Swal.fire({
               title: "Password Updated Successfully",

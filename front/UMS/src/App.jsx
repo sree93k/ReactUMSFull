@@ -10,10 +10,15 @@ import AdminHome from './pages/admin/adminHome';
 import AdminEdit from './pages/admin/adminEdit';
 import AdminDashboard from './pages/admin/adminDashboard';
 import AdminEditPassword from './pages/admin/adminEditPassword'
+import AdminAddUSer from './pages/admin/adminAddUser'
 import HeaderRenderer from './components/HeaderRender';
 import EditProfile from './pages/user/edit'
 import ResetPassowrd from './pages/user/passwordEdit'
 import backgroundVideo from '../public/mainBg.mp4'
+import AdminLayout from './pages/admin/adminLayout';
+import UserLayout from './pages/user/userLayour';
+// import AdminPrivateRoute from './components/PrivateRoute'
+// import UserPrivateRoute from './components/PrivateRoute'
 
 const App = () => {
   return (
@@ -25,18 +30,25 @@ const App = () => {
       <BrowserRouter>
         <HeaderRenderer />
         <Routes>
+       
           <Route path="/" element={<MainPage />} />
           <Route path="/user/signin" element={<SignIn />} />
           <Route path="/user/signup" element={<SignUp />} />
-          <Route path="/user/home" element={<Home />} />
-          <Route path="/user/edit" element={<Edit />} />
-          <Route path="/user/editProfile" element={<EditProfile />} />
-          <Route path="/user/resetPassword" element={<ResetPassowrd />} />
           <Route path="/admin/signin" element={<AdminSignIn />} />
-          <Route path="/admin/home" element={<AdminHome />} />
-          <Route path="/admin/edit/:userId" element={<AdminEdit />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/changepassword/:userId" element={<AdminEditPassword/>}/>
+
+
+              <Route path="/user/home" element={<Home />} />
+              <Route path="/user/edit" element={<Edit />} />
+              <Route path="/user/editProfile" element={<EditProfile />} />
+              <Route path="/user/resetPassword" element={<ResetPassowrd />} />
+       
+              <Route path="/admin/home" element={<AdminHome />} />
+              <Route path="/admin/edit/:userId" element={<AdminEdit />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/admin/changepassword/:userId" element={<AdminEditPassword/>}/>
+              <Route path="/admin/addUser" element={<AdminAddUSer/>}/>
+          
+
         </Routes>
       </BrowserRouter>
       </div>

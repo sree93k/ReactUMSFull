@@ -7,10 +7,12 @@ import jwt from 'jsonwebtoken';
 
 export const signin = async (req, res, next) => {
   console.log("Admin signin auth controller");
+  console.log("step 0");
   const { email, password } = req.body;
-  console.log("admin details",req.body);
-  console.log(email);
+console.log("step 1",email,password);
+
   try {
+    console.log("step 4");
     const validAdmin = await Admin.findOne({email});
     console.log("admin details",validAdmin);
     if (!validAdmin) return next(errorHandler(404, 'Admin not found'));

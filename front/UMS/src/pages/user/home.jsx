@@ -1,22 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import backgroundVideo from '../../../public/mainBg.mp4';
-import { useDispatch, useSelector } from 'react-redux';
-import { signOut } from '../../redux/user/userSlice'; 
+import {  useSelector } from 'react-redux';
+
 
 const home = () => {
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const {currentUser} = useSelector((state) => state.user);
+    useEffect(()=>{
+      document.title="UMS User"
+  
+      return ()=>{document.title=""}
+    },[])
+
+    const {currentUser,isLogged} = useSelector((state) => state.user);
     console.log("home page cureent user",currentUser);
 
     const handleEditProfile = () => {
       navigate('/user/editprofile');
     };
     useEffect(()=>{
-        navigate('/user/home')
-    },[currentUser])
+      console.log("stepss useEffect");
+       if(!isLogged)
+       {
+        console.log("stepss useEffect 1");
+        navigate('/user/signin')
+       }
+       if(!currentUser || !currentUser.verified)
+       {
+        console.log("stepss useEffect 2");
+        dispatch(signOut())
+        navigate('/user/signin')
+       }
+    },[])
 
   return (
     <div className='relative h-screen'>

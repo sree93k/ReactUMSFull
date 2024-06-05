@@ -1,31 +1,47 @@
-import React from 'react'
+import React ,{useEffect}from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
-import { signOut } from '../../redux/admin/adminSlice'; 
+import  {signOut} from '../../redux/admin/adminSlice'
 
 const adminHome = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {currentAdmin} = useSelector((state) => state.admin);
+  const {currentAdmin,isLogged} = useSelector((state) => state.admin);
   console.log("currnt admin Home page",currentAdmin);
 const handleDashboard=()=>{
   navigate('/admin/dashboard')
 }
+useEffect(()=>{
+  console.log("step 1");
+  if(isLogged)
+  {
+    console.log("step 2");
+      navigate('/admin/home')
+  }
+  else
+  {
+    console.log("step 3");
+    navigate('/admin/signin')
+  }
+},[])
+useEffect(()=>{
+  document.title="UMS Admin"
 
-  
-    const handleLogout =async () => {
-      try {
-        console.log("logout 1");
-        await fetch('/server/adminAuth/signout')
-        console.log("logout 2");
-        dispatch(signOut())
-        console.log("logout 3");
-        console.log("admin sign out home");
-        navigate('/admin/signin');
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  return ()=>{document.title=""}
+},[])
+    // const handleLogout =async () => {
+    //   try {
+    //     console.log("logout 1");
+    //     await fetch('/server/adminAuth/signout')
+    //     console.log("logout 2");
+    //     dispatch(signOut())
+    //     console.log("logout 3");
+    //     console.log("admin sign out home");
+    //     navigate('/admin/signin');
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
   return (
     <div className='relative h-screen'>
     <div className="relative mt-20 z-10 p-0 max-w-lg mx-auto flex items-center justify-center  bg-gray-100">

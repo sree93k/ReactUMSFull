@@ -14,10 +14,7 @@ const Header = () => {
     console.log("current Admin details",currentAdmin);
     console.log("currentAdmin is >>@@##$$",currentAdmin);
 
-
-    useEffect(() => {
-      console.log("currentUser in header is", currentAdmin);
-    }, [currentAdmin]);
+  
     const handleSignOut=async()=>{
       try {
         await fetch('/server/adminAuth/signout')

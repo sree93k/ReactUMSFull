@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { app } from '../../../firbase'; 
-import { updateUserStart, updateUserSuccess, updateUserFailure } from '../../redux/user/userSlice';
+import { updateAdminStart, updateAdminSuccess, updateAdminFailure } from '../../redux/admin/adminSlice';
 import Swal from 'sweetalert2'
 import { ToastContainer, toast ,Bounce} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -87,7 +87,7 @@ const AdminEdit = () => {
     try {
       console.log("form data in edi t handle submit",formData);
 
-      dispatch(updateUserStart());
+      dispatch(updateAdminStart());
       const res = await fetch(`/server/admin/updateUser/${userId}`, {
         method: 'POST',
         headers: {
@@ -100,10 +100,10 @@ const AdminEdit = () => {
         console.log("notify 1");
         notify(data.message)
         console.log("notify 2");
-        dispatch(updateUserFailure(data));
+        dispatch(updateAdminFailure(data));
         return;
       }
-      dispatch(updateUserSuccess(data));
+      dispatch(updateAdminSuccess(data));
       setUpdateSuccess(true);
       Swal.fire({
         title: "Updated Successfully",

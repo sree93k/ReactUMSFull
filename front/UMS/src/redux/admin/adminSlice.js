@@ -4,6 +4,7 @@ const initialState = {
   currentAdmin: null,
   loading: false,
   error: false,
+  isLogged:false,
 };
 
 const adminSlice = createSlice({
@@ -13,11 +14,13 @@ const adminSlice = createSlice({
     signInStart:(state)=>{
       state.loading=true
       state.error=false
+      state.isLogged=true
   },
   signInSuccess:(state,action)=>{
       state.currentAdmin=action.payload
       state.loading=false
       state.error=false
+      state.isLogged=true
   },
   signInFailure:(state,action)=>{
       state.loading=false
@@ -51,6 +54,7 @@ const adminSlice = createSlice({
       state.currentAdmin=null
       state.loading=false
       state.error=false
+      state.isLogged=false
   }
   },
 });
@@ -59,6 +63,12 @@ export const {
   signInStart,
   signInSuccess,
   signInFailure,
+  updateAdminFailure,
+  updateAdminStart,
+  updateAdminSuccess,
+  deleteAdminStart,
+  deleteUserFailure,
+  deleteAdminSuccess,
   signOut,
 } = adminSlice.actions;
 

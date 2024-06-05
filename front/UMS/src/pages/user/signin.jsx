@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Link,useNavigate } from 'react-router-dom';
-import backgroundVideo from '../../../public/mainBg.mp4';
 import  {signInStart,signInSuccess,signInFailure} from '../../redux/user/userSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import OAuth from '../../components/OAuth'
@@ -14,8 +13,6 @@ const Signin = () => {
    const navigate=useNavigate()
     const dispatch=useDispatch()
     const notify = (error) => toast(error);
-
-
 
 
     useEffect(()=>{
@@ -38,7 +35,11 @@ const Signin = () => {
      const handleSubmit=async(e)=>{
       console.log("handle submitted step 1");
       e.preventDefault()
-      
+      if(!formData.email || !formData.password)
+      {
+        notify("Inputs Cannot be empty")
+        return
+      }
       try {
         console.log("handle submitted step 2");
           dispatch(signInStart())
@@ -56,8 +57,8 @@ const Signin = () => {
           {
             console.log("failure sign in");
             console.log("new error",error)
-            error?notify("Invalid Input"):notify("Account Not Found")
-            // notify()
+            // error?notify("Invalid Input"):notify("Account Not Found")
+            notify(data.message)
               dispatch(signInFailure(data))
               return;
           }

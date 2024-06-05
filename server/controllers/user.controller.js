@@ -1,22 +1,43 @@
 import User from "../models/user.model.js"
 import { errorHandler } from "../utils/error.js"
 import bcryptjs from 'bcryptjs'
-
+import validator from 'validator';
 
 export const test=(req,res)=>{
-    res.json({message:"API is working"})
+    res.json({message:"API is working"})    
 }
 
 //update user
 
 export const updateUser=async(req,res,next)=>{
     console.log("update user step 1");
-    console.log("params id",req.params.id);
+   
     console.log("body is",req.body);
+    console.log("params id",req.params.id);
+    console.log(req.user.id);
     if(req.user.id!==req.params.id)
     {
         console.log("update user step 2");
         return next(errorHandler(401,"You can update only account !"))
+    }
+    const userAccount=await User.findById(req.params.id)
+    const nameCompare=validator.equals(req.body.username,userAccount.username)
+    const emailCompare=validator.equals(req.body.email,userAccount.email)
+    const profileCompare=validator.equals(req.body.profilePicture,userAccount.profilePicture)
+    if(nameCompare && emailCompare && profileCompare)
+    {
+        console.log("no chnage found");
+        return next(errorHandler(401,"No changes Found"))
+    }
+
+    const emailValidator=validator.isEmail(req.body.email)
+    const nameValidator=validator.isAlpha(req.body.username)
+
+   
+    if(!emailValidator || !nameValidator)
+    {
+        console.log("eerros validation");
+        return next(errorHandler(401,"Invalid Inputs!"))
     }
     try {
         console.log("update user step 3");
@@ -54,7 +75,7 @@ export const deleteUser=async(req,res,next)=>{
     }
     try {
         await User.findByIdAndDelete(req.params.id)
-        res.status(200).json("User has been deleted...")
+        res.clearCookie('access_token').status(200).json('User has been deleted');
     } catch (error) {
         next(error)
     }
@@ -77,9 +98,19 @@ export const updatePassword=async(req,res,next)=>{
         console.log("step1 ");
         if(req.params.id)
         {
+            const comparePassword=validator.equals(password1,password2)
+            const strongPassword=validator.isStrongPassword(password1)
             console.log("step 2 ");
-            if(password1===password2)
+            if(!comparePassword)
             {
+                console.log("eerros validation 1");
+                return next(errorHandler(401,"Password Not Matching"))
+            }
+            else if(!strongPassword)
+            {
+                console.log("eerros validation 2");
+                return next(errorHandler(401,"Password must contain min 8 character, min 1 UpperCase , 1 LowerCase and min 1 Symbol"))
+            }
                 console.log(userID);
                 console.log(password1);
                 console.log(password2);
@@ -99,12 +130,7 @@ export const updatePassword=async(req,res,next)=>{
             const {password,...rest}=userData._doc;
             console.log("step 3.2 ");
             res.status(200).json(rest)
-            }
-            else
-            {
-                console.log("step 4 ");
-                res.status(404).json("Password Not Matching")
-            }
+          
         }
         else
         {

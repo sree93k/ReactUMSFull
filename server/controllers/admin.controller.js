@@ -3,6 +3,8 @@ import { errorHandler } from "../utils/error.js"
 import bcryptjs from 'bcryptjs'
 import User from '../models/user.model.js'
 import validator from 'validator';
+import jwt from 'jsonwebtoken';
+
 
 export const test=(req,res)=>{
     res.json({message:"API is working"})
@@ -51,7 +53,7 @@ export const updateAdmin=async(req,res,next)=>{
 }
 
 export const updateVerifiedStatus=async(req,res,next)=>{
-    console.log("step 1");
+    console.log("Verificatrion started step 1");
     try {
         console.log("step 2");
         const userID=req.params.id
@@ -65,13 +67,13 @@ export const updateVerifiedStatus=async(req,res,next)=>{
             { $set: { verified: verified } },
             { new: true }
           );
-          console.log("step 4");
+          console.log("Verificatrion step 4");
         console.log("current User",currentUser);
         console.log("step 5");
         res.status(200).json()
         console.log("step 6");
     } catch (error) {
-        console.log("erorr is",error);
+        console.log("Verificatrion erorr is",error);
         next(error)
     }
 }
@@ -219,5 +221,42 @@ export const deleteUser=async(req,res,next)=>{
         res.status(200).json("User has been deleted...")
     } catch (error) {
         next(error)
+    }
+}
+
+
+export const createUser=async(req,res,next)=>{
+    
+    console.log("create user hello00");
+    const { username, email, password } = req.body;
+
+    const emailValidator=validator.isEmail(email)
+    const nameValidator=validator.isAlpha(username)
+    const strongPassword=validator.isStrongPassword(password)
+   
+    if(!emailValidator )
+    {
+        console.log("eerros1 validation");
+        return next(errorHandler(401,"Invalid Email"))
+    }
+    if(!nameValidator)
+    {
+        console.log("eerros2 validation");
+        return next(errorHandler(401,"Username Must be Alphabets Only"))
+    }
+    if(!strongPassword)
+    {
+        console.log("eerros3 validation");
+        return next(errorHandler(401,"Password must contain min 8 character, min 1 UpperCase , 1 LowerCase and min 1 Symbol"))
+    }
+    const hashedPassword = bcryptjs.hashSync(password, 10);
+    const newUser = new User({ username, email, password: hashedPassword });
+
+    try {
+      await newUser.save();
+      res.status(201).json({ message: 'User created successfully' });
+    } catch (error) {
+            
+            next("Account Already Exists")
     }
 }

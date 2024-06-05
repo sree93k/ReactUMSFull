@@ -5,6 +5,8 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/
 import { app } from '../../../firbase'; 
 import { updateUserStart,updateUserSuccess,updateUserFailure, deleteUserStart,deleteUserSuccess,deleteUserFailure,signOut } from '../../redux/user/userSlice'
 import Swal from 'sweetalert2'
+import { ToastContainer, toast ,Bounce} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const edit = () => {
    const [image,setImage]=useState(undefined)
@@ -13,11 +15,46 @@ const edit = () => {
   const [formData,setFormData]=useState({})
   const fileRef=useRef(null)
   const dispatch=useDispatch()
-  const {currentUser,loading, error}=useSelector((state)=>state.user)    
+  const {currentUser,loading, error,isLogged}=useSelector((state)=>state.user)    
   const [updateSuccess,setUpdateSuccess]=useState(false)
   const navigate = useNavigate();
 
+  const notify = (err) => toast(err); 
+
+  useEffect(()=>{
+    document.title="UMS User"
+
+    return ()=>{document.title=""}
+  },[])
+
+
+  useEffect(()=>{
+    console.log("useeddect 0");
+    if(!isLogged)
+    {
+      console.log("useeddect 1");
+     navigate('/user/signin')
+    }
+    if(!currentUser || !currentUser.verified)
+    {
+      console.log("useeddect 2");
+      dispatch(signOut())
+      navigate('/user/signin')
+    }
+ },[]) 
+
+ function isLogin()
+ {
+  if(!currentUser.verified)
+    {
+      console.log("useeddect 2");
+      dispatch(signOut())
+      navigate('/user/signin')
+    }
+ } 
+
   useEffect(() => {
+    isLogin()
     if (currentUser) {
     setFormData({
       username: currentUser.username,
@@ -27,12 +64,14 @@ const edit = () => {
   }
   }, [currentUser]);
   useEffect(() => {
+    isLogin()
     if (image) {
       handleFileUpload(image);
     }
   }, [image]);
 
   const handleFileUpload = async (image) => {
+    isLogin()
     const storage = getStorage(app);
     const fileName = new Date().getTime() + image.name;
     const storageRef = ref(storage, fileName);
@@ -60,11 +99,14 @@ const edit = () => {
 
 
   const handleChange = (e) => {
+    isLogin()
     console.log("set form Dtata",formData,e.target.value);
     setFormData({...formData,[e.target.name]:e.target.value})
   }
   const handleSubmit=async(e)=>{
+    
     e.preventDefault()
+    isLogin()
     console.log("hello");
     try {
       dispatch(updateUserStart())
@@ -80,7 +122,10 @@ const edit = () => {
       console.log("data ststus",data);
       if(data.success===false)
       {
-        dispatch(updateUserFailure(data))
+        console.log("notify 1");
+        notify(data.message)
+        console.log("notify 2");
+        dispatch(updateUserFailure(data));
         return;
       }
       dispatch(updateUserSuccess(data))
@@ -105,19 +150,23 @@ const edit = () => {
       });
       navigate('/user/home')
     } catch (error) {
+      notify(error.message)
       dispatch(updateUserFailure(error))
     }
   }
 
   const handleChangePassword = () => {
+    isLogin()
     navigate('/user/resetPassword'); // Assuming this navigates to the password change page
   };
 
   const handleBackButton=()=>{
+    isLogin()
     navigate('/user/home');
   }
 
   const handleDeleteAccount=async()=>{
+    isLogin()
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: "btn btn-success",
@@ -247,6 +296,11 @@ const edit = () => {
 
         <span onClick={handleDeleteAccount} className='text-red-700  cursor-pointer'>Delete Account</span>
       </div>
+      <ToastContainer 
+       position='top-center'
+       theme='dark'
+       transition={Bounce}
+       />
     </div>
   )
 }
