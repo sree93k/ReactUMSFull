@@ -9,8 +9,7 @@ export const signin = async (req, res, next) => {
   console.log("Admin signin auth controller");
   console.log("step 0");
   const { email, password } = req.body;
-console.log("step 1",email,password);
-
+  console.log("step 1",email,password);
   try {
     console.log("step 4");
     const validAdmin = await Admin.findOne({email});
@@ -18,7 +17,7 @@ console.log("step 1",email,password);
     if (!validAdmin) return next(errorHandler(404, 'Admin not found'));
     const validPassword = bcryptjs.compareSync(password, validAdmin.password);
     if (!validPassword) return next(errorHandler(401, 'wrong credentials'));
-    const token = jwt.sign({ id: validAdmin._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: validAdmin._id,role:'admin' }, process.env.JWT_SECRET);
     const { password: hashedPassword, ...rest } = validAdmin._doc;
     console.log("valid admin deatisls",validAdmin);
     const expiryDate = new Date(Date.now() + 3600000); // 1 hour

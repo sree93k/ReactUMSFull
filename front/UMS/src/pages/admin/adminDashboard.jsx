@@ -148,22 +148,6 @@ useEffect(()=>{
     }
   };
 
-  // const handleOnSearch = (string, results) => {
-  //   console.log('Search string:', string);
-  //   console.log('Search results:', results);
-  //   if (string === "") {
-  //     setFilteredUsers(users);
-  //   } else {
-  //     console.log("results",results);
-  //     setFilteredUsers(results);
-  //   }
-  // };
-  
-  // const handleOnClear = () => {
-  //   console.log('Clear search');
-  //   setFilteredUsers(users);
-  // };
-
   const handleOnSearch = (term, hits) => {
     setSearchTerm(term);
     if (term === '') {
@@ -171,14 +155,6 @@ useEffect(()=>{
     } else {
       setFilteredUsers(hits);
     }
-  };
-
-  const formatResult = (item) => {
-    return (
-      <div>
-        <span style={{ display: 'block', textAlign: 'left' }}> {item.email}</span>
-      </div>
-    );
   };
 
   return (

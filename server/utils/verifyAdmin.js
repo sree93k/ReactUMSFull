@@ -6,10 +6,12 @@ export const verifyToken=(req,res,next)=>{
 
     if(!token) return next(errorHandler(401,"You are not authenticated!"))
 
-    jwt.verify(token,process.env.JWT_SECRET,(err,user)=>{
+    jwt.verify(token,process.env.JWT_SECRET,(err,admin)=>{
         if(err) return next(errorHandler(403,"Token is not Valid !"))
-
-        req.user=user
-        next()
+        if(admin.role==='admin')
+        {
+            next()
+        }
+        
     })
 }

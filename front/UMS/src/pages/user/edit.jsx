@@ -35,7 +35,7 @@ const edit = () => {
       console.log("useeddect 1");
      navigate('/user/signin')
     }
-    if(!currentUser || !currentUser.verified)
+    if(!currentUser || !currentUser.verified )
     {
       console.log("useeddect 2");
       dispatch(signOut())
